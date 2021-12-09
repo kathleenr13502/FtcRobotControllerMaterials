@@ -46,7 +46,7 @@ public class Auto extends LinearOpMode {
             telemetry.addData("Left Front Encoder", leftFront.getCurrentPosition());
             telemetry.update();
         }*/
-        robot.driveStraight(15);
+        robot.pointTurn(90);
 
 
     }

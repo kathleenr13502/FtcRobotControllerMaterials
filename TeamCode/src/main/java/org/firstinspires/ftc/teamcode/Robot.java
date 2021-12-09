@@ -23,5 +23,7 @@ public class Robot {
 
     }
 
-    public void pointTurn(double angle){}
+    public void pointTurn(double angle){
+        chassis.pointTurn(angle);
+    }
 }

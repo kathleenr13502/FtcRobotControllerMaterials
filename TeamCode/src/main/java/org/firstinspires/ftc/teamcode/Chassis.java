@@ -12,10 +12,14 @@ public class Chassis {
     private DcMotor rightRear = null;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
-    private final double ticksPerInch = 43.95*.90;
+    private final double ticksPerInch = 43.95*.94;
     private double ticksDistance;
     private double ticksSoFar=0;
     private double startPos;
+    private double arcDistance;
+    private double baseRad = 24.6138172578/2;
+    private double arcStartPos;
+    private double arcTicksSoFar=0;
 
 
 
@@ -51,5 +55,22 @@ public class Chassis {
 
     }
 
-    public void pointTurn(double angle){}
+    public void pointTurn(double angle){
+        arcDistance = (angle / 360.0) * baseRad * Math.PI;
+
+        leftFront.setPower(.2);
+        rightFront.setPower(-.2);
+        leftRear.setPower(.2);
+        rightRear.setPower(-.2);
+        arcStartPos=leftFront.getCurrentPosition();
+
+        while(arcTicksSoFar<arcDistance*ticksPerInch){
+            arcTicksSoFar= leftFront.getCurrentPosition()-arcStartPos;
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+    }
 }
