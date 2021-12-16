@@ -38,6 +38,8 @@ public class Chassis {
     }
 
     public void driveStraight(double distance){
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ticksDistance=ticksPerInch*distance;
         leftFront.setPower(.2);
         rightFront.setPower(.2);
@@ -57,6 +59,8 @@ public class Chassis {
     }
 
     public void pointTurn(double angle, double power){
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arcDistance = (angle / 360.0) * baseDi * Math.PI;
 
         leftFront.setPower(power);
@@ -66,7 +70,7 @@ public class Chassis {
         arcStartPos=leftFront.getCurrentPosition();
 
         while(arcTicksSoFar<arcDistance*ticksPerInchTurn){
-            arcTicksSoFar= leftFront.getCurrentPosition()-arcStartPos;
+            arcTicksSoFar= Math.abs(leftFront.getCurrentPosition())-arcStartPos;
         }
 
         leftFront.setPower(0);
