@@ -40,19 +40,15 @@ public class Auto extends LinearOpMode {
         rightRear = hardwareMap.get(DcMotor.class, "back_right_motor");
         waitForStart();
         runtime.reset();
-        Robot robot=new Robot(telemetry, hardwareMap);
+        Robot robot=new Robot(hardwareMap, telemetry);
 
         /*while(opModeIsActive()) {
             telemetry.addData("Left Front Encoder", leftFront.getCurrentPosition());
             telemetry.update();
         }*/
-        robot.driveStraight(23);
-        robot.pointTurn(85, -.5);
-        robot.driveStraight(46);
-        robot.pointTurn(180, -.5);
-        robot.driveStraight(46);
-        robot.pointTurn(85, .5);
-        robot.driveStraight(23);
+        robot.spin();
+
+
 
 
 

@@ -5,25 +5,28 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    private Chassis chassis;
-    private Telemetry telemetry;
+
     private HardwareMap hardwareMap;
+    private Telemetry telemetry;
+    private Chassis chassis;
+    private SpinningArm spinningArm;
 
-
-    public Robot(Telemetry telemetry, HardwareMap hardwareMap){
-        this.telemetry=telemetry;
-        this.hardwareMap=hardwareMap;
-        chassis=new Chassis(telemetry, hardwareMap);
+    public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
+        chassis = new Chassis(hardwareMap,telemetry);
+        spinningArm = new SpinningArm(hardwareMap, telemetry);
     }
 
-
-
-    public void driveStraight(double distance){
+    void driveStraight(double distance){
         chassis.driveStraight(distance);
 
     }
-
-    public void pointTurn(double angle, double power){
-        chassis.pointTurn(angle, power);
+    void pointTurn(double angle,boolean rightTurn) {
+        chassis.pointTurn(angle,rightTurn);
     }
+    void spin(){
+        spinningArm.spin();
+    }
+
 }

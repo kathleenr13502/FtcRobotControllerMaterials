@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -10,22 +11,16 @@ public class Chassis {
     private DcMotor leftRear = null;
     private DcMotor rightFront = null;
     private DcMotor rightRear = null;
-    private Telemetry telemetry;
     private HardwareMap hardwareMap;
-    private final double ticksPerInchTurn = (43.95*.9)*1.3;
-    private final double ticksPerInch = 43.95*.96;
-    private double ticksDistance;
-    private double ticksSoFar=0;
-    private double startPos;
-    private double arcDistance;
-    private double baseDi = 24.6138172578;
-    private double arcStartPos;
-    private double arcTicksSoFar = 0;
+    private Telemetry telemetry;
+    private static final double TICKS_PER_INCH=39.6;
+    private double baseDi = 32.5;//24.6138172578;
 
 
-
-    public Chassis(Telemetry telemetry, HardwareMap hardwareMap) {
+    public Chassis(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
+
         leftFront = hardwareMap.get(DcMotor.class, "front_left_motor");
         leftRear = hardwareMap.get(DcMotor.class, "back_left_motor");
         rightFront = hardwareMap.get(DcMotor.class, "front_right_motor");
@@ -37,47 +32,51 @@ public class Chassis {
         rightRear.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    public void driveStraight(double distance){
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ticksDistance=ticksPerInch*distance;
-        leftFront.setPower(.2);
-        rightFront.setPower(.2);
-        leftRear.setPower(.2);
-        rightRear.setPower(.2);
+    void driveStraight(double distance){
 
-        startPos=leftFront.getCurrentPosition();
-        while(ticksSoFar<ticksDistance){
-            ticksSoFar= leftFront.getCurrentPosition()-startPos;
-
+        double ticksToRun=Math.abs(distance)*TICKS_PER_INCH;
+        int ticksSoFar = 0;
+        int startPos=leftFront.getCurrentPosition();
+        if (distance<0) {
+            leftFront.setPower(-0.2);
+            leftRear.setPower(-0.2);
+            rightFront.setPower(-0.2);
+            rightRear.setPower(-0.2);
+        } else {
+            leftFront.setPower(0.2);
+            leftRear.setPower(0.2);
+            rightFront.setPower(0.2);
+            rightRear.setPower(0.2);
+        }
+        while (ticksSoFar<ticksToRun){
+            ticksSoFar = Math.abs(leftFront.getCurrentPosition() - startPos);
         }
         leftFront.setPower(0);
-        rightFront.setPower(0);
         leftRear.setPower(0);
+        rightFront.setPower(0);
         rightRear.setPower(0);
 
     }
 
-    public void pointTurn(double angle, double power){
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arcDistance = (angle / 360.0) * baseDi * Math.PI;
-
-        leftFront.setPower(power);
-        rightFront.setPower(-power);
-        leftRear.setPower(power);
-        rightRear.setPower(-power);
-        arcStartPos=leftFront.getCurrentPosition();
-
-        while(arcTicksSoFar<arcDistance*ticksPerInchTurn){
-            arcTicksSoFar= Math.abs(leftFront.getCurrentPosition())-arcStartPos;
+    void pointTurn(double angle,boolean rightTurn) {
+        double turnDistance = (angle/360.0)*baseDi*Math.PI;
+        double TicksSoFar = 0;
+        double TickstoRun = turnDistance*TICKS_PER_INCH;
+        int startPos=leftFront.getCurrentPosition();
+        double power = 0.25;
+        if (!rightTurn){
+            power=-power;
         }
-
+        leftFront.setPower(power);
+        leftRear.setPower(power);
+        rightFront.setPower(-power);
+        rightRear.setPower(-power);
+        while (TicksSoFar<TickstoRun){
+            TicksSoFar = Math.abs(leftFront.getCurrentPosition()-startPos);
+        }
         leftFront.setPower(0);
-        rightFront.setPower(0);
         leftRear.setPower(0);
+        rightFront.setPower(0);
         rightRear.setPower(0);
-
-        
     }
 }
