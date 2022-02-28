@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -79,4 +78,12 @@ public class Chassis {
         rightFront.setPower(0);
         rightRear.setPower(0);
     }
+
+    void drive(double drive, double turn, double strafe) {
+        leftFront.setPower(drive + strafe + turn);
+        leftRear.setPower(drive - strafe + turn);
+        rightFront.setPower(drive - strafe - turn);
+        rightRear.setPower(drive + strafe - turn);
+    }
+
 }

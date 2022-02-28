@@ -21,7 +21,7 @@ public class SpinningArm {
         spinningArm.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    void spin(){
+    /*void spin(){
 
         double ticksToRun=Math.abs(ROTATION_DISTANCE)*TICKS_PER_INCH;
         int ticksSoFar = 0;
@@ -32,7 +32,30 @@ public class SpinningArm {
         }
         spinningArm.setPower(0);
 
+    }*/
+
+    void spinLeft(boolean spin){
+        if(spin) {
+            spinningArm.setPower(.7);
+        }
+        spinningArm.setPower(0);
     }
+    void spinRight(boolean spin) {
+        if (spin) {
+            spinningArm.setPower(-.7);
+        }
+        spinningArm.setPower(0);
+    }
+
+    void spinLeftAuto(){
+        spinningArm.setPower(.6);
+
+    }
+
+    void spinRightAuto(){
+        spinningArm.setPower(-.6);
+    }
+
 
 
 }
